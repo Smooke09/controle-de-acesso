@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2021",
+    "target": "ES2021",
     "lib": ["es5", "es6", "ES2018"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -15,7 +15,7 @@
     "noImplicitAny": true,
     "strictPropertyInitialization": false
   },
-  "include": ["src/**/*", "src/database/data-source.ts"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"],
   "ts-node": {
     "files": true
