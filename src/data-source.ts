@@ -9,6 +9,6 @@ export const AppDataSource = new DataSource({
   password: "password",
   database: "typeorm",
   subscribers: [],
-  entities: ["src/database/entity/**/*.ts"],
+  entities: ["src/database/entities/**/*.ts"],
   migrations: ["src/database/migrations/*.ts"],
 });
