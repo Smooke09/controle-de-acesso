@@ -4,14 +4,25 @@ import { UserUseCase } from "../useCase/userUseCase";
 class UserController {
   async getUsers(req: Request, res: Response) {
     const users = await new UserUseCase().getAllUsers();
-    res.send(users);
+
+    if (!users) {
+      return res.status(404).send({ message: "Users not found" });
+    }
+
+    res.send({
+      message: "Users found successfully",
+      users,
+    });
   }
 
   async getUser(req: Request, res: Response) {
     const { id } = req.params;
 
     const user = await new UserUseCase().getUser(Number(id));
-    res.send(user);
+    res.send({
+      message: "User found successfully",
+      user,
+    });
   }
 
   async createUser(req: Request, res: Response) {
@@ -23,7 +34,10 @@ class UserController {
       password,
     });
 
-    res.send(newUser);
+    res.send({
+      message: "User created successfully",
+      newUser,
+    });
   }
 
   async updateUser(req: Request, res: Response) {
@@ -40,7 +54,10 @@ class UserController {
       return res.status(404).send({ message: "User not found" });
     }
 
-    res.send(updatedUser);
+    res.send({
+      message: "User updated successfully",
+      updatedUser,
+    });
   }
 
   async deleteUser(req: Request, res: Response) {

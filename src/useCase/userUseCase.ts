@@ -10,6 +10,11 @@ type User = {
 export class UserUseCase {
   public async getAllUsers() {
     const users = await UserRepository().find();
+
+    if (users.length === 0) {
+      return false;
+    }
+
     return users;
   }
 
