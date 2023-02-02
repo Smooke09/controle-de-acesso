@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
+import { PermissionRepository } from "../repositories";
 import { PermissionUseCase } from "../useCase/permissionUseCase";
 
 class PermissionController {
   async getPermissions(req: Request, res: Response) {
-    const permissions = await new PermissionUseCase().getAllPermissions();
+    const permissions = await new PermissionUseCase(
+      PermissionRepository()
+    ).getAllPermissions();
 
     if (!permissions) {
       return res.status(404).send({ message: "Permissions not found" });
@@ -18,7 +21,10 @@ class PermissionController {
   async getPermission(req: Request, res: Response) {
     const { id } = req.params;
 
-    const permission = await new PermissionUseCase().getPermission(id);
+    const permission = await new PermissionUseCase(
+      PermissionRepository(),
+      id
+    ).getPermission();
 
     if (!permission) {
       return res.status(404).send({ message: "Permission not found" });
@@ -33,10 +39,10 @@ class PermissionController {
   async createPermission(req: Request, res: Response) {
     const { name, description } = req.body;
 
-    const permission = await new PermissionUseCase().createPermission({
+    const permission = await new PermissionUseCase(PermissionRepository(), "", {
       name,
       description,
-    });
+    }).createPermission();
 
     if (!permission) {
       return res.status(400).send({ message: "Error creating permission" });
@@ -52,10 +58,11 @@ class PermissionController {
     const { id } = req.params;
     const { name, description } = req.body;
 
-    const permission = await new PermissionUseCase().updatePermission(id, {
+    const permission = await new PermissionUseCase(PermissionRepository(), "", {
+      id,
       name,
       description,
-    });
+    }).updatePermission();
 
     if (!permission) {
       return res.status(400).send({ message: "Error updating permission" });
@@ -70,7 +77,10 @@ class PermissionController {
   async deletePermission(req: Request, res: Response) {
     const { id } = req.params;
 
-    const permission = await new PermissionUseCase().deletePermission(id);
+    const permission = await new PermissionUseCase(
+      PermissionRepository(),
+      id
+    ).deletePermission();
 
     if (!permission) {
       return res.status(400).send({ message: "Error deleting permission" });

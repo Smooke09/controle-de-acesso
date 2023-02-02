@@ -10,10 +10,7 @@ import { Permission } from "./Permission";
 import { Role } from "./Role";
 
 @Entity("users")
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class User extends BaseEntity {
   @Column()
   username: string;
 

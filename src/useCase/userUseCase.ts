@@ -1,4 +1,5 @@
 import { UserRepository } from "../repositories";
+import BaseClass from "./helpers/baseClass";
 
 type User = {
   id?: number;
@@ -7,53 +8,42 @@ type User = {
   username: string;
 };
 
-export class UserUseCase {
+export class UserUseCase extends BaseClass {
+  constructor(repository: any, id: string = "", obj: Partial<User> = {}) {
+    super(repository, id, obj);
+  }
+
   public async getAllUsers() {
-    const users = await UserRepository().find();
-
-    if (users.length === 0) {
-      return false;
-    }
-
-    return users;
+    return await this.get();
   }
 
-  public async getUser(id: number) {
-    const user = await UserRepository().findBy({ id });
-    return user;
+  public async getUser() {
+    return await this.getById();
   }
 
-  public async createUser(user: User) {
-    const newUser = UserRepository().create(user);
-    await UserRepository().save(newUser);
-
-    return newUser;
-  }
-
-  public async updateUser(id: number, user: User) {
-    const verifyUser = await UserRepository().findBy({ id });
-
-    if (verifyUser.length === 0) {
-      return false;
-    }
-
-    const updatedUser = await UserRepository().save({
-      id,
-      ...user,
+  public async createUser() {
+    const verifyUser = await UserRepository().findOneBy({
+      email: this.obj.email,
     });
 
-    return updatedUser;
+    if (verifyUser) return false;
+
+    return await this.create(this.obj);
   }
 
-  public async deleteUser(id: number) {
-    const verifyUser = await UserRepository().findBy({ id });
+  public async updateUser() {
+    const verifyUser = await UserRepository().findOneBy({ id: this.obj.id });
 
-    if (verifyUser.length === 0) {
-      return false;
-    }
+    if (!verifyUser) return false;
 
-    await UserRepository().delete({ id });
+    return await this.update();
+  }
 
-    return true;
+  public async deleteUser() {
+    const verifyUser = await UserRepository().findBy({ id: this.id });
+
+    if (verifyUser.length === 0) return false;
+
+    return await this.delete();
   }
 }

@@ -2,6 +2,7 @@ import { PermissionRepository } from "../repositories";
 import BaseClass from "./helpers/baseClass";
 
 type Permission = {
+  id: string;
   name: string;
   description: string;
 };
